@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { scoreController } from '../controllers/score.controller.ts';
+import { scoreController } from '../controllers/score.controller.js';
 
 const router = Router();
 

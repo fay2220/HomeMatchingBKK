@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import { calculateLifeFitScore, getScoreLabel } from '../service/lifefitEngine.ts';
-import type { UserProfile, PropertyData } from '../models/types.ts';
+import { calculateLifeFitScore, getScoreLabel } from '../service/lifefitEngine.js';
+import type { UserProfile, PropertyData } from '../models/types.js';
 
 export async function scoreController(req: Request, res: Response): Promise<void> {
     const { userProfile, property } = req.body as {
