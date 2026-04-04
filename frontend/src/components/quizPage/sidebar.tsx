@@ -1,12 +1,6 @@
-import { GREEN, BLUE, type Step } from "../variable";
+import { GREEN, BLUE, type Step, STEPS } from "../variable";
 
-const STEPS = [
-    { id: 0, label: "Family Profile", icon: "👥", desc: "Tell us who lives with you" },
-    { id: 1, label: "Pet Profile", icon: "🐾", desc: "Any furry companions?" },
-    { id: 2, label: "Health Needs", icon: "❤️", desc: "Medical and wellness priorities" },
-    { id: 3, label: "Lifestyle", icon: "🌳", desc: "What matters in your neighborhood" },
-    { id: 4, label: "Results", icon: "✨", desc: "Your LifeFit profile is ready" },
-];
+
 
 
 export function Sidebar({ step, selections }: { step: Step; selections: Record<string, string[]> }) {
