@@ -15,3 +15,41 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Property {
+  id      Int    @id @default(autoincrement())
+  name    String
+  type    String // "condo" | "house" | "townhouse" | "villa" | etc.
+  location    String
+  locationLat Float
+  locationLng Float
+  imageUrl    String?
+
+  price   Int
+  sizeSqm Float
+
+  // Facilities
+  isPetFriendly      Boolean @default(false)
+  hasUniversalDesign Boolean @default(false)
+  hasPetPark         Boolean @default(false)
+  hasParking         Boolean @default(false)
+  hasElevator        Boolean @default(false)
+
+  // Environmental
+  pm25       Float  // µg/m³
+  noiseLevel Float  // dB (0–100)
+
+  // Character
+  securityLevel  String // "low" | "medium" | "high"
+  communityStyle String // "urban" | "suburban" | "resort" | "quiet" | etc.
+
+  // Proximity distances in meters
+  // JSON shape: { hospital, vet, gym, cafe, school, greenSpace, commuteStation }
+  nearPlaces Json
+
+  // Commute in minutes (pre-calculated / Google Maps estimate)
+  commuteMinutes Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

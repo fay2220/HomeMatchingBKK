@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
+import scoreRouter from './routes/score.routes';
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to HomeMatchingBkk API' });
 });
+
+app.use('/api/score', scoreRouter);
 
 app.get('/health', async (req, res) => {
   try {
