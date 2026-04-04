@@ -1,6 +1,7 @@
 export type Step = 0 | 1 | 2 | 3 | 4;
 export const GREEN = "#10B981";
 export const BLUE = "#1E3A8A";
+export const AMBER = "#F59E0B";
 
 export const STEPS = [
     { id: 0, label: "Family Profile", icon: "👥", desc: "Tell us who lives with you" },
