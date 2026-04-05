@@ -18,16 +18,17 @@ export function QuizPage() {
     const [family, setFamily] = useState<string[]>([]);
     const [pets, setPets] = useState<string[]>([]);
     const [health, setHealth] = useState<string[]>([]);
-    const [budget, setBudget] = useState<{ min: number, max: number }>({ min: 100000, max: 100000000 });
+    const [budget, setBudget] = useState<{ min: number, max: number }>({ min: 500000, max: 50000000 });
     const [houseSize, setHouseSize] = useState<{ min: number, max: number }>({ min: 24, max: 240 });
     const [commute, setCommute] = useState<number>(30);
     const [lifestyle, setLifestyle] = useState<string[]>([]);
+    const [location, setLocationState] = useState<string>("");
 
     const toggle = (arr: string[], set: (v: string[]) => void, v: string) =>
         set(arr.includes(v) ? arr.filter(x => x !== v) : [...arr, v]);
 
     const stepComponents = [
-        <Step1 key="1" peopleCount={peopleCount} setPeopleCount={setPeopleCount} family={family} toggle={(v) => toggle(family, setFamily, v)} />,
+        <Step1 key="1" peopleCount={peopleCount} setPeopleCount={setPeopleCount} family={family} toggle={(v) => toggle(family, setFamily, v)} location={location} setLocation={setLocationState} />,
         <Step2 key="2" pets={pets} setPets={setPets} toggle={(v) => toggle(pets, setPets, v)} />,
         <Step3 key="3" health={health} toggle={(v) => toggle(health, setHealth, v)} />,
         <Step4 key="4" budget={budget} setBudget={setBudget} commute={commute} setCommute={setCommute} houseSize={houseSize} setHouseSize={setHouseSize} />,
@@ -38,10 +39,14 @@ export function QuizPage() {
     const formatB = (n: number) => n >= 1000000 ? `${(n/1000000).toFixed(n % 1000000 === 0 ? 0 : 1)}M` : `${(n/1000).toFixed(0)}k`;
 
     const selections: Record<string, string[]> = { 
-        Family: peopleCount > 0 ? [`${peopleCount} People`, ...family] : family, 
+        Family: [
+            ...(location ? [`📍 เขต${location}`] : []),
+            ...(peopleCount > 0 ? [`${peopleCount} People`] : []),
+            ...family
+        ], 
         Pets: pets, 
         Health: health, 
-        Budget: budget.max > 100000 ? [`฿${formatB(budget.min)}-฿${formatB(budget.max)}`, `${houseSize.min}-${houseSize.max} SQM`, `<${commute}m commute`] : [],
+        Budget: budget.max > 500000 ? [`฿${formatB(budget.min)}-฿${formatB(budget.max)}`, `${houseSize.min}-${houseSize.max} SQM`, `<${commute}m commute`] : [],
         Lifestyle: lifestyle 
     };
     const selectedCount = [family, pets, health, ["Budget & Commute"], lifestyle][step] ?? [];
