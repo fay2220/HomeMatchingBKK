@@ -14,9 +14,13 @@ async function main() {
         id: number;
         name: string;
         type: string;
+        description?: string;
         location: string;
+        district: string;
         locationLat: number;
         locationLng: number;
+        imageUrl?: string;
+        images?: string[];
         price: number;
         sizeSqm: number;
         isPetFriendly: boolean;
@@ -29,7 +33,7 @@ async function main() {
         securityLevel: string;
         communityStyle: string;
         nearPlaces: Record<string, number>;
-        commuteMinutes: number;
+        workplaceCommuteMins: Record<string, number>;
     }>;
 
     console.log(`🌱 Seeding ${properties.length} properties...`);
@@ -38,45 +42,53 @@ async function main() {
         await prisma.property.upsert({
             where: { id: p.id },
             update: {
-                name:               p.name,
-                type:               p.type,
-                location:           p.location,
-                locationLat:        p.locationLat,
-                locationLng:        p.locationLng,
-                price:              p.price,
-                sizeSqm:            p.sizeSqm,
-                isPetFriendly:      p.isPetFriendly,
-                hasUniversalDesign: p.hasUniversalDesign,
-                hasPetPark:         p.hasPetPark,
-                hasParking:         p.hasParking,
-                hasElevator:        p.hasElevator,
-                pm25:               p.pm25,
-                noiseLevel:         p.noiseLevel,
-                securityLevel:      p.securityLevel,
-                communityStyle:     p.communityStyle,
-                nearPlaces:         p.nearPlaces,
-                commuteMinutes:     p.commuteMinutes,
+                name:                p.name,
+                type:                p.type,
+                description:         p.description,
+                location:            p.location,
+                district:            p.district,
+                locationLat:         p.locationLat,
+                locationLng:         p.locationLng,
+                imageUrl:            p.imageUrl,
+                images:              p.images ?? [],
+                price:               p.price,
+                sizeSqm:             p.sizeSqm,
+                isPetFriendly:       p.isPetFriendly,
+                hasUniversalDesign:  p.hasUniversalDesign,
+                hasPetPark:          p.hasPetPark,
+                hasParking:          p.hasParking,
+                hasElevator:         p.hasElevator,
+                pm25:                p.pm25,
+                noiseLevel:          p.noiseLevel,
+                securityLevel:       p.securityLevel,
+                communityStyle:      p.communityStyle,
+                nearPlaces:          p.nearPlaces,
+                workplaceCommuteMins: p.workplaceCommuteMins,
             },
             create: {
-                id:                 p.id,
-                name:               p.name,
-                type:               p.type,
-                location:           p.location,
-                locationLat:        p.locationLat,
-                locationLng:        p.locationLng,
-                price:              p.price,
-                sizeSqm:            p.sizeSqm,
-                isPetFriendly:      p.isPetFriendly,
-                hasUniversalDesign: p.hasUniversalDesign,
-                hasPetPark:         p.hasPetPark,
-                hasParking:         p.hasParking,
-                hasElevator:        p.hasElevator,
-                pm25:               p.pm25,
-                noiseLevel:         p.noiseLevel,
-                securityLevel:      p.securityLevel,
-                communityStyle:     p.communityStyle,
-                nearPlaces:         p.nearPlaces,
-                commuteMinutes:     p.commuteMinutes,
+                id:                  p.id,
+                name:                p.name,
+                type:                p.type,
+                description:         p.description,
+                location:            p.location,
+                district:            p.district,
+                locationLat:         p.locationLat,
+                locationLng:         p.locationLng,
+                imageUrl:            p.imageUrl,
+                images:              p.images ?? [],
+                price:               p.price,
+                sizeSqm:             p.sizeSqm,
+                isPetFriendly:       p.isPetFriendly,
+                hasUniversalDesign:  p.hasUniversalDesign,
+                hasPetPark:          p.hasPetPark,
+                hasParking:          p.hasParking,
+                hasElevator:         p.hasElevator,
+                pm25:                p.pm25,
+                noiseLevel:          p.noiseLevel,
+                securityLevel:       p.securityLevel,
+                communityStyle:      p.communityStyle,
+                nearPlaces:          p.nearPlaces,
+                workplaceCommuteMins: p.workplaceCommuteMins,
             },
         });
         console.log(`  ✅ ${p.id}. ${p.name}`);

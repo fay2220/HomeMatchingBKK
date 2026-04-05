@@ -17,13 +17,20 @@ model User {
 }
 
 model Property {
-  id      Int    @id @default(autoincrement())
-  name    String
-  type    String // "condo" | "house" | "townhouse" | "villa" | etc.
-  location    String
+  id          Int    @id @default(autoincrement())
+  name        String
+  type        String // "condo" | "house" | "townhouse" | "villa"
+  description String? @db.Text // Human-readable description shown in detail view
+
+  // Location
+  location    String  // Human-readable address / area label
+  district    String  // Bangkok เขต — used to match Quiz Step 1 dropdown (e.g. "วัฒนา")
   locationLat Float
   locationLng Float
-  imageUrl    String?
+
+  // Media — first image URL (quick access), full gallery as JSON array
+  imageUrl    String?           // primary thumbnail
+  images      Json?             // ["url1","url2",...] for carousel
 
   price   Int
   sizeSqm Float
@@ -41,14 +48,15 @@ model Property {
 
   // Character
   securityLevel  String // "low" | "medium" | "high"
-  communityStyle String // "urban" | "suburban" | "resort" | "quiet" | etc.
+  communityStyle String // "urban" | "suburban" | "resort" | "quiet" | "mixed"
 
   // Proximity distances in meters
-  // JSON shape: { hospital, vet, gym, cafe, school, greenSpace, commuteStation }
+  // JSON: { hospital, vet, gym, cafe, school, greenSpace, commuteStation, shopping }
   nearPlaces Json
 
-  // Commute in minutes (pre-calculated / Google Maps estimate)
-  commuteMinutes Int
+  // Pre-calculated travel time to key Bangkok work zones (minutes)
+  // JSON: { "สีลม / สาทร": 20, "สุขุมวิท": 10, "อโศก": 8, ... }
+  workplaceCommuteMins Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

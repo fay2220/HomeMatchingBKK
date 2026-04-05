@@ -6,16 +6,28 @@ export interface NearPlaces {
     cafe?: number;
     school?: number;
     greenSpace?: number;
-    commuteStation?: number;
+    commuteStation?: number;  // BTS/MRT/Bus stop
+    shopping?: number;        // mall / market
 }
 
 // ─── User Profile ─────────────────────────────────────────────────────────────
-export type HealthCondition = 'respiratory' | 'mobility' | 'cardiac' | 'none';
+export type HealthCondition =
+    | 'Respiratory Conditions'       // Asthma, COPD — PM2.5 heavy weight
+    | 'Mobility & Accessibility'     // elevator/ramp/universal design
+    | 'Cardiovascular Health'        // cardiac — quiet area, near hospital
+    | 'Mental Wellness'              // green space, low noise
+    | 'Allergy Sensitivity'          // clean air, low PM2.5
+    | 'Chronic Condition Management' // near clinic/pharmacy
+    | 'Visual / Hearing Impairment'  // accessible transit
+    | 'Post-Surgery Recovery'        // near hospital + quiet
+    | 'none';
 
 export type PetType =
     | 'Dog'
     | 'Cat'
-    | 'Other'
+    | 'Rabbit / Small Animal'
+    | 'Bird'
+    | 'Fish / Reptile'
     | 'none';
 
 export type FamilyMember =
@@ -29,11 +41,18 @@ export type FamilyMember =
     | 'Mobility Needs';
 
 export type LifestylePreference =
-    | 'cafe'
-    | 'gym'
-    | 'school'
-    | 'green_space'
-    | 'pet_park';
+    | 'Green Spaces'
+    | 'Transit Access'
+    | 'Top Schools'
+    | 'Shopping Nearby'
+    | 'High Walkability'
+    | 'Near Hospital'
+    | 'Restaurant Scene'
+    | 'Quiet & Low Noise'
+    | 'Café Culture'
+    | 'Bike-Friendly'
+    | 'Recreation Facilities'
+    | 'City Connectivity';
 
 export interface UserProfile {
     budget: { min: number; max: number };     // THB
@@ -43,6 +62,8 @@ export interface UserProfile {
     pets: PetType[];
     health: HealthCondition[];
     commute: number;                          // max acceptable minutes
+    workplace: string;                        // e.g. "อโศก" — matches workplaceCommuteMins key
+    preferredDistrict?: string;               // e.g. "วัฒนา" — from Step1 location dropdown
     lifestyle: LifestylePreference[];
 }
 
@@ -53,14 +74,17 @@ export type CommunityStyle = 'urban' | 'suburban' | 'resort' | 'quiet' | 'mixed'
 export interface PropertyData {
     id?: number;
     name: string;
-    type: string;              // "condo" | "house" | "townhouse" | "villa" | ...
-    location: string;          // human-readable address / district
+    type: string;           // "condo" | "house" | "townhouse" | "villa"
+    description?: string;   // display text for detail view
+    location: string;       // human-readable address / area
+    district: string;       // Bangkok เขต (e.g. "วัฒนา") — matches step1 dropdown
     locationLat: number;
     locationLng: number;
-    imageUrl?: string;
+    imageUrl?: string;      // primary thumbnail URL
+    images?: string[];      // carousel image URLs
 
-    price: number;             // THB
-    sizeSqm: number;           // sq.m.
+    price: number;          // THB
+    sizeSqm: number;        // sq.m.
 
     // Facilities
     isPetFriendly: boolean;
@@ -70,8 +94,8 @@ export interface PropertyData {
     hasElevator: boolean;
 
     // Environmental
-    pm25: number;              // µg/m³
-    noiseLevel: number;        // dB (0–100)
+    pm25: number;           // µg/m³
+    noiseLevel: number;     // dB (0–100)
 
     // Character
     securityLevel: SecurityLevel;
@@ -80,8 +104,9 @@ export interface PropertyData {
     // Proximity distances in meters
     nearPlaces: NearPlaces;
 
-    // Pre-calculated commute in minutes
-    commuteMinutes: number;
+    // Pre-calculated commute minutes to Bangkok work zones
+    // Key matches the BANGKOK_PLACES list in step4.tsx
+    workplaceCommuteMins: Record<string, number>;
 }
 
 // ─── Score Output ─────────────────────────────────────────────────────────────
@@ -92,6 +117,6 @@ export interface ScoreBreakdown {
     pet: number;        // 0–100
     lifestyle: number;  // 0–100
     total: number;      // 0–100 final weighted score
-    passed: boolean;    // false if hard-failed by Phase 1 filters
+    passed: boolean;
     failReason?: string;
 }
