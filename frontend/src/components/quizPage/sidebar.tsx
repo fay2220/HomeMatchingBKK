@@ -1,24 +1,30 @@
+import { useLocation } from "wouter";
 import { GREEN, BLUE, type Step, STEPS } from "../variable";
 
 
 
 
 export function Sidebar({ step, selections }: { step: Step; selections: Record<string, string[]> }) {
+    const [, navigate] = useLocation();
     return (
         <div className="w-72 flex-shrink-0 flex flex-col"
             style={{ background: `linear-gradient(160deg, ${BLUE} 0%, #1e40af 100%)`, minHeight: "100%" }}>
 
-            {/* Logo */}
+            {/* Logo — click to go Home */}
             <div className="px-8 pt-8 pb-6 border-b border-white/10">
-                <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: GREEN }}>
+                <button
+                    onClick={() => navigate("/")}
+                    className="flex items-center gap-3 cursor-pointer group"
+                    style={{ background: "none", border: "none", padding: 0 }}
+                >
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110" style={{ background: GREEN }}>
                         <span style={{ fontSize: 18 }}>🏡</span>
                     </div>
-                    <div>
-                        <div className="text-white font-black text-lg leading-none">LifeFit</div>
-                        <div className="text-blue-300 text-xs">Living Platform</div>
+                    <div className="text-left">
+                        <div className="text-white font-black text-base leading-tight group-hover:text-green-300 transition-colors">HomeMatchingBKK</div>
+                        <div className="text-blue-300 text-[10px]">LifeFit Engine™</div>
                     </div>
-                </div>
+                </button>
             </div>
 
             {/* Step list */}

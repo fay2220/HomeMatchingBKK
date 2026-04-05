@@ -23,6 +23,7 @@ export function QuizPage() {
     const [commute, setCommute] = useState<number>(30);
     const [lifestyle, setLifestyle] = useState<string[]>([]);
     const [location, setLocationState] = useState<string>("");
+    const [workplace, setWorkplace] = useState<string>("");
 
     const toggle = (arr: string[], set: (v: string[]) => void, v: string) =>
         set(arr.includes(v) ? arr.filter(x => x !== v) : [...arr, v]);
@@ -31,7 +32,7 @@ export function QuizPage() {
         <Step1 key="1" peopleCount={peopleCount} setPeopleCount={setPeopleCount} family={family} toggle={(v) => toggle(family, setFamily, v)} location={location} setLocation={setLocationState} />,
         <Step2 key="2" pets={pets} setPets={setPets} toggle={(v) => toggle(pets, setPets, v)} />,
         <Step3 key="3" health={health} toggle={(v) => toggle(health, setHealth, v)} />,
-        <Step4 key="4" budget={budget} setBudget={setBudget} commute={commute} setCommute={setCommute} houseSize={houseSize} setHouseSize={setHouseSize} />,
+        <Step4 key="4" budget={budget} setBudget={setBudget} commute={commute} setCommute={setCommute} houseSize={houseSize} setHouseSize={setHouseSize} workplace={workplace} setWorkplace={setWorkplace} />,
         <Step5 key="5" lifestyle={lifestyle} toggle={(v) => toggle(lifestyle, setLifestyle, v)} />,
         <Step6 key="6" setLocation={setLocation} />
     ];
@@ -46,7 +47,12 @@ export function QuizPage() {
         ], 
         Pets: pets, 
         Health: health, 
-        Budget: budget.max > 500000 ? [`฿${formatB(budget.min)}-฿${formatB(budget.max)}`, `${houseSize.min}-${houseSize.max} SQM`, `<${commute}m commute`] : [],
+        Budget: budget.max > 500000 ? [
+            ...(workplace ? [`💼 ${workplace}`] : []),
+            `฿${formatB(budget.min)}-฿${formatB(budget.max)}`,
+            `${houseSize.min}-${houseSize.max} SQM`,
+            `<${commute}m commute`
+        ] : [],
         Lifestyle: lifestyle 
     };
     const selectedCount = [family, pets, health, ["Budget & Commute"], lifestyle][step] ?? [];
