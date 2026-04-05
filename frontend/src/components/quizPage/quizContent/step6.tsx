@@ -1,10 +1,10 @@
 import { GREEN, BLUE } from "../../variable";
 
 interface Step6Props {
-    setLocation: (path: string) => void;
+    onFinish: () => void;
 }
 
-export function Step6({ setLocation }: Step6Props) {
+export function Step6({ onFinish }: Step6Props) {
     return (
         <div className="flex flex-col items-center justify-center h-full py-12 text-center max-w-xl mx-auto">
             <div className="w-28 h-28 rounded-full flex items-center justify-center mb-6 text-5xl"
@@ -34,7 +34,7 @@ export function Step6({ setLocation }: Step6Props) {
                     ))}
                 </div>
             </div>
-            <button onClick={() => setLocation("/dashboard")}
+            <button onClick={onFinish}
                 className="px-10 py-4 rounded-2xl font-bold text-white text-base cursor-pointer hover:opacity-90 transition-all"
                 style={{ background: `linear-gradient(135deg, ${BLUE}, #1e40af)`, boxShadow: "0 6px 20px rgba(30,58,138,0.3)" }}>
                 View My LifeFit Dashboard →

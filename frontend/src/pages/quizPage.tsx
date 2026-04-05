@@ -28,13 +28,30 @@ export function QuizPage() {
     const toggle = (arr: string[], set: (v: string[]) => void, v: string) =>
         set(arr.includes(v) ? arr.filter(x => x !== v) : [...arr, v]);
 
+    const onFinish = () => {
+        const userProfile = {
+            budget,
+            houseSize,
+            peopleCount,
+            family,
+            pets,
+            health,
+            commute,
+            workplace,
+            preferredDistrict: location,
+            lifestyle
+        };
+        sessionStorage.setItem('userProfile', JSON.stringify(userProfile));
+        setLocation("/dashboard");
+    };
+
     const stepComponents = [
         <Step1 key="1" peopleCount={peopleCount} setPeopleCount={setPeopleCount} family={family} toggle={(v) => toggle(family, setFamily, v)} location={location} setLocation={setLocationState} />,
         <Step2 key="2" pets={pets} setPets={setPets} toggle={(v) => toggle(pets, setPets, v)} />,
         <Step3 key="3" health={health} toggle={(v) => toggle(health, setHealth, v)} />,
         <Step4 key="4" budget={budget} setBudget={setBudget} commute={commute} setCommute={setCommute} houseSize={houseSize} setHouseSize={setHouseSize} workplace={workplace} setWorkplace={setWorkplace} />,
         <Step5 key="5" lifestyle={lifestyle} toggle={(v) => toggle(lifestyle, setLifestyle, v)} />,
-        <Step6 key="6" setLocation={setLocation} />
+        <Step6 key="6" onFinish={onFinish} />
     ];
 
     const formatB = (n: number) => n >= 1000000 ? `${(n/1000000).toFixed(n % 1000000 === 0 ? 0 : 1)}M` : `${(n/1000).toFixed(0)}k`;

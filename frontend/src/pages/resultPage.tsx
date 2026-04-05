@@ -1,15 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GREEN, BLUE } from "../components/variable";
 import { FILTERS } from "../components/resultPage/data";
-import { MOCK_PROPERTIES } from "../components/resultPage/mapPanel";
 import { PropertyListCard } from "../components/resultPage/propertyListCard";
 import { MapPanel } from "../components/resultPage/mapPanel";
+import type { Property } from "../components/resultPage/types";
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export function PropertiesPage() {
-    const [selected, setSelected] = useState<number>(1);
+    const [selected, setSelected] = useState<number>(0);
     const [activeFilter, setActiveFilter] = useState<string>("All");
+    
+    // Dynamic data state
+    const [properties, setProperties] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchScores = async () => {
+            try {
+                const profileStr = sessionStorage.getItem('userProfile');
+                // Default fallback if no profile exists (e.g., direct navigation)
+                const userProfile = profileStr ? JSON.parse(profileStr) : {
+                    budget: { min: 2000000, max: 10000000 },
+                    houseSize: { min: 30, max: 200 },
+                    peopleCount: 1,
+                    family: [],
+                    pets: ['none'],
+                    health: ['none'],
+                    commute: 30,
+                    workplace: 'อโศก',
+                    lifestyle: []
+                };
+
+                const res = await fetch('http://localhost:3000/api/score/all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userProfile })
+                });
+
+                if (!res.ok) throw new Error('Failed to fetch scores');
+                
+                const data = await res.json();
+                setProperties(data.results || []);
+                if (data.results?.length > 0) {
+                    setSelected(data.results[0].id);
+                }
+            } catch (err) {
+                console.error(err);
+                setError('Failed to load property scores.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchScores();
+    }, []);
+
+    if (loading) {
+        return <div className="flex h-screen items-center justify-center font-bold text-gray-500">Calculating your LifeFit matches...</div>;
+    }
+    if (error) {
+        return <div className="flex h-screen items-center justify-center font-bold text-red-500">{error}</div>;
+    }
 
     return (
         <div
@@ -32,7 +84,7 @@ export function PropertiesPage() {
             >
                 <div>
                     <div className="text-xs font-semibold uppercase tracking-widest mb-0.5" style={{ color: "#94A3B8" }}>
-                        {MOCK_PROPERTIES.length} properties found
+                        {properties.length} properties found
                     </div>
                     <h1 className="text-xl font-black" style={{ color: BLUE }}>
                         HomeMatchingBKK{" "}
@@ -73,7 +125,7 @@ export function PropertiesPage() {
 
                     {/* Scrollable list */}
                     <div className="flex-1 overflow-y-auto p-4" style={{ scrollbarWidth: "thin" }}>
-                        {MOCK_PROPERTIES.map(p => (
+                        {properties.map(p => (
                             <PropertyListCard
                                 key={p.id}
                                 {...p}
@@ -86,7 +138,7 @@ export function PropertiesPage() {
 
                 {/* Map — right, fills remaining space */}
                 <div className="flex-1 p-4 min-w-0">
-                    <MapPanel selected={selected} onSelect={setSelected} />
+                    <MapPanel properties={properties} selected={selected} onSelect={setSelected} />
                 </div>
 
             </div>
